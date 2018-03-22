@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 /**
  * Created by Oscar on 3/22/2018.
  */
-public class Transaction {
+public class Purchase {
 
     int ID;
     Timestamp date;
@@ -14,7 +14,7 @@ public class Transaction {
     int storeID;
     int customerID;
 
-    public Transaction(int ID, Timestamp date, double total, String paymentMethod, int storeID, int customerID) {
+    public Purchase(int ID, Timestamp date, double total, String paymentMethod, int storeID, int customerID) {
         this.ID = ID;
         this.date = date;
         this.total = total;
