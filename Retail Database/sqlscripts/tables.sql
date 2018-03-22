@@ -25,7 +25,7 @@ CREATE TABLE Store (
 
 CREATE TABLE Product (
     UPC INT NOT NULL PRIMARY KEY,
-    Description VARCHAR(20), 
+    Description VARCHAR(20),
     Brand VARCHAR(10),
     FOREIGN KEY(Brand) REFERENCES Brand,);
 
