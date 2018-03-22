@@ -19,7 +19,7 @@ CREATE TABLE Brand (
 CREATE TABLE Store (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     Phone_Number VARCHAR(12),
-    Date_Opened TIMESTAMP,
+    Date_Opened DATE,
     Budget NUMERIC(15,2),
     Address VARCHAR(30));
 

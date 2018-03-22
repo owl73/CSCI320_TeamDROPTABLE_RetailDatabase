@@ -1,5 +1,6 @@
 package objects;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
@@ -9,12 +10,19 @@ public class Store {
 
     int id;
     String phone;
-    Timestamp date_opened;
+    Date date_opened;
     double budget;
     String address;
 
-    public Store(int id, String phone, Timestamp date_opened, double budget, String address) {
+    public Store(int id, String phone, Date date_opened, double budget, String address) {
         this.id = id;
+        this.phone = phone;
+        this.date_opened = date_opened;
+        this.budget = budget;
+        this.address = address;
+    }
+
+    public Store(String phone, Date date_opened, double budget, String address) {
         this.phone = phone;
         this.date_opened = date_opened;
         this.budget = budget;
@@ -29,7 +37,7 @@ public class Store {
         return phone;
     }
 
-    public Timestamp getDate_opened() {
+    public Date getDate_opened() {
         return date_opened;
     }
 

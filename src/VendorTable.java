@@ -129,7 +129,7 @@ public class VendorTable {
             stmt.execute(updateQuery.toString());
         } catch (SQLException e) {
             System.err.println("Vendor Update SQL Query failed.");
-            System.err.println(String.format("Vendor %s, Phone %s, Site", Name, phone, website));
+            System.err.println(String.format("Vendor %s, Phone %s, Site %s", Name, phone, website));
             e.printStackTrace();
         }
 

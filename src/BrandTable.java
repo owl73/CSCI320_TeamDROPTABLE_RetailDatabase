@@ -99,7 +99,7 @@ public class BrandTable {
      *
      * @return
      */
-    public static String createBrandInsertSQL(ArrayList<Brand> people){
+    public static String createBrandInsertSQL(ArrayList<Brand> brand){
         StringBuilder sb = new StringBuilder();
 
         /**
@@ -117,11 +117,11 @@ public class BrandTable {
          *
          * If it is the last Brand add a semi-colon to end the statement
          */
-        for(int i = 0; i < people.size(); i++){
-            Brand p = people.get(i);
+        for(int i = 0; i < brand.size(); i++){
+            Brand p = brand.get(i);
             sb.append(String.format(" (\'%s\',\'%s\')",
                     p.getName(), p.getVendor()));
-            if( i != people.size()-1){
+            if( i != brand.size()-1){
                 sb.append(",");
             }
             else{
