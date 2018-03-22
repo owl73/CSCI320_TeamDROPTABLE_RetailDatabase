@@ -1,4 +1,4 @@
-package objects;
+package objects.Products.Computers;
 
 /**
  * Created by Oscar on 3/22/2018.
