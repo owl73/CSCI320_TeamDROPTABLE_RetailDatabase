@@ -29,23 +29,18 @@ CREATE TABLE Product (
     Brand VARCHAR(10),
     FOREIGN KEY(Brand) REFERENCES Brand,);
 
-CREATE TABLE Desktop (
-    UPC INT PRIMARY KEY,
-    Power_Supply VARCHAR(8),
-    Graphics_Card VARCHAR(10));
-
 CREATE TABLE Computer (
     UPC INT PRIMARY KEY,
     Ram_Size INT,
     Processor VARCHAR(10),
     Hard_Disk VARCHAR(8));
 
-CREATE TABLE TV (
+CREATE TABLE Desktop (
     UPC INT PRIMARY KEY,
-    Smart_Features VARCHAR(15),
-    Mount_Type VARCHAR(15));
+    Power_Supply VARCHAR(8),
+    Graphics_Card VARCHAR(10));
 
-CREATE TABLE Screen (
+CREATE TABLE Monitor (
     UPC INT PRIMARY KEY,
     Size INT,
     Resolution VARCHAR(10),
@@ -54,15 +49,16 @@ CREATE TABLE Screen (
 
 CREATE TABLE Laptop ( 
     UPC INT NOT NULL PRIMARY KEY,
-    Battery_Life INT);
+    Battery_Life INT
+    Screen_Size INT);
 
 CREATE TABLE Shipment (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    Date_placed TIMESTAMP, 
-    Date_arrived TIMESTAMP, 
+    Date_placed DATE,
+    Date_arrived DATE,
     Cost NUMERIC(15,2), 
     Tracking_number VARCHAR(30),
-    Vendor_name VARCHAR(20) ,
+    Vendor_name VARCHAR(20),
     UPC INT,
     Quantity INT,
     FOREIGN KEY(Vendor_name) REFERENCES Vendor,
@@ -70,7 +66,7 @@ CREATE TABLE Shipment (
 
 CREATE TABLE Purchase (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    Date TIMESTAMP, 
+    Date TIMESTAMP NOT NULL DEFAULT ,
     Total NUMERIC(10,2), 
     Payment_Method VARCHAR(10), 
     Customer_ID INT,
