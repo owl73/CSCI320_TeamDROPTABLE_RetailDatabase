@@ -75,13 +75,15 @@ public class RetailCMI {
         System.out.println("Yeahhh");
         //Create the database connections, basically makes the database
         demo.createConnection(location, user, password);
-        
+        demo.getConnection().setAutoCommit(false);
         //Create the reader for command line arguments
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
-
-        BrandTable.createBrandTable(demo.getConnection());
-        BrandTable.printBrandTable(demo.getConnection());
+        
+        //BrandTable.createBrandTable(demo.getConnection());
+        //BrandTable.printBrandTable(demo.getConnection());
+        CustomerTable.createCustomerTable(demo.getConnection());
+        CustomerTable.printCustomerTable(demo.getConnection());
         
         while(true){
 

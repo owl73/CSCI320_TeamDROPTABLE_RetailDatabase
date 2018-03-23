@@ -1,23 +1,27 @@
 /**
- * Created by Oscar on 3/22/2018.
+ * Created by Qasim on 3/22/2018.
  */
 package pdm.h2.demo;
-import pdm.h2.demo.objects.Brand;
+import pdm.h2.demo.objects.Customer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.sql.Timestamp;
 
-public class BrandTable {
+public class CustomerTable {
 
-    public static void populateBrandTableFromCSV(Connection conn,
-                                                  String fileName)
-            throws SQLException {
+    public static void populateCustomerTableFromCSV(Connection conn,
+                                                 String fileName)
+            throws SQLException, ParseException {
         /**
          * Structure to store the data as you read it in
          * Will be used later to populate the table
@@ -25,25 +29,28 @@ public class BrandTable {
          * You can do the reading and adding to the table in one
          * step, I just broke it up for example reasons
          */
-        ArrayList<Brand> people = new ArrayList<Brand>();
+    	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+        ArrayList<Customer> people = new ArrayList<Customer>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = br.readLine()) != null) {
-                String[] split = line.split(",");
-                people.add(new Brand(split));
+            	String[] split = line.split(",");
+            	Date parsedTimeStamp = (Date) dateFormat.parse(split[2]);
+            	Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+                people.add(new Customer(Integer.parseInt(split[0]), split[1], timestamp, split[3], split[4]));
             }
             br.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        
         /**
          * Creates the SQL query to do a bulk add of all people
          * that were read in. This is more efficent then adding one
          * at a time
          */
-        String sql = createBrandInsertSQL(people);
+        String sql = createCustomerInsertSQL(people);
 
         /**
          * Create and execute an SQL statement
@@ -54,12 +61,11 @@ public class BrandTable {
         stmt.execute(sql);
     }
 
-
-    public static void createBrandTable(Connection conn) {
+    public static void createCustomerTable(Connection conn) {
         try {
-            String query = "CREATE TABLE IF NOT EXISTS brand ( \n" +
-                    "    Name VARCHAR(10) PRIMARY KEY,\n" +
-                    "    Vendor VARCHAR(20));";
+            String query = "CREATE TABLE IF NOT EXISTS Customer ( \n" +
+                    "    ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Name VARCHAR(32),\n" +
+                    "    Date Datetime, Phone1 varchar(15), Phone2 varchar(15));";
 
             /**
              * Create a query and execute
@@ -71,16 +77,49 @@ public class BrandTable {
             e.printStackTrace();
         }
     }
+    
+    public static String createCustomerInsertSQL(ArrayList<Customer> people){
+        StringBuilder sb = new StringBuilder();
 
-    public static void addBrand(Connection conn,
-                                 String Name, String Vendor){
+        /**
+         * The start of the statement,
+         * tells it the table to add it to
+         * the order of the data in reference
+         * to the columns to ad dit to
+         */
+        sb.append("INSERT INTO customer (ID, Name, Date, Phone1, Phone2) VALUES");
+
+        /**
+         * For each Brand append a (id, first_name, last_name, MI) tuple
+         *
+         * If it is not the last Brand add a comma to seperate
+         *
+         * If it is the last Brand add a semi-colon to end the statement
+         */
+        for(int i = 0; i < people.size(); i++){
+        	Customer p = people.get(i);
+            sb.append(String.format(" (\'%s\',\'%s\',\'%s\')",
+                    p.getId(), p.getName(), p.getDate(), p.getPhone1(), p.getPhone2()));
+            if( i != people.size()-1){
+                sb.append(",");
+            }
+            else{
+                sb.append(";");
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static void addCustomer(Connection conn,
+                                int id, String name, Timestamp date, String p1, String p2){
 
         /**
          * SQL insert statement
          */
-        String query = String.format("INSERT INTO brand "
-                        + "VALUES(\'%s\',\'%s\');",
-                Name, Vendor);
+        String query = String.format("INSERT INTO customer "
+                        + "VALUES(\'%s\',\'%s\',\'%s\',\'%s\',\'%s\');",
+                id, name, date, p1, p2);
         try {
             /**
              * create and execute the query
@@ -93,47 +132,7 @@ public class BrandTable {
 
     }
 
-    /**
-     * This creates an sql statement to do a bulk add of people
-     *
-     * @param people: list of Brand objects to add
-     *
-     * @return
-     */
-    public static String createBrandInsertSQL(ArrayList<Brand> brand){
-        StringBuilder sb = new StringBuilder();
-
-        /**
-         * The start of the statement,
-         * tells it the table to add it to
-         * the order of the data in reference
-         * to the columns to ad dit to
-         */
-        sb.append("INSERT INTO brand (Name, Vendor) VALUES");
-
-        /**
-         * For each Brand append a (id, first_name, last_name, MI) tuple
-         *
-         * If it is not the last Brand add a comma to seperate
-         *
-         * If it is the last Brand add a semi-colon to end the statement
-         */
-        for(int i = 0; i < brand.size(); i++){
-            Brand p = brand.get(i);
-            sb.append(String.format(" (\'%s\',\'%s\')",
-                    p.getName(), p.getVendor()));
-            if( i != brand.size()-1){
-                sb.append(",");
-            }
-            else{
-                sb.append(";");
-            }
-        }
-
-        return sb.toString();
-    }
-
-    public static void updateBrandTable(Connection conn, String Name, String newVendor){
+    public static void updateCustomerTable(Connection conn, int id, String name, Timestamp date, String p1, String p2){
         StringBuilder updateQuery = new StringBuilder();
 
         /**
@@ -142,8 +141,8 @@ public class BrandTable {
          * the order of the data in reference
          * to the columns to ad dit to
          */
-        updateQuery.append(String.format("UPDATE brand SET Vendor = \'%s\' ", newVendor));
-        updateQuery.append(String.format("WHERE Name = \'%s\'", Name));
+        updateQuery.append(String.format("UPDATE customer SET Name=\'%s\', Date=\'%s\', Phone1=\'%s\', Phone2=\'%s\'", name, date, p1, p2));
+        updateQuery.append(String.format("WHERE ID = %d", id));
         updateQuery.append(";");
 
         try {
@@ -153,14 +152,14 @@ public class BrandTable {
             Statement stmt = conn.createStatement();
             stmt.execute(updateQuery.toString());
         } catch (SQLException e) {
-            System.err.println("Brand Update SQL Query failed.");
-            System.err.println(String.format("Brand %s, Vendor %s", Name, newVendor));
+            System.err.println("Customer Update SQL Query failed.");
+            System.err.println(String.format("Name %s, Date %s, Phone1 %s, Phone2 %s", name, date, p1, p2));
             e.printStackTrace();
         }
     }
 
     /**
-     * Makes a query to the Brand table
+     * Makes a query to the Vendor table
      * with given columns and conditions
      *
      * @param conn
@@ -168,9 +167,9 @@ public class BrandTable {
      * @param whereClauses: conditions to limit query by
      * @return
      */
-    public static ResultSet queryBrandTable(Connection conn,
-                                             ArrayList<String> columns,
-                                             ArrayList<String> whereClauses){
+    public static ResultSet queryCustomerTable(Connection conn,
+                                            ArrayList<String> columns,
+                                            ArrayList<String> whereClauses){
         StringBuilder sb = new StringBuilder();
 
         /**
@@ -201,7 +200,7 @@ public class BrandTable {
         /**
          * Tells it which table to get the data from
          */
-        sb.append("FROM brand ");
+        sb.append("FROM Customer ");
 
         /**
          * If we gave it conditions append them
@@ -242,16 +241,19 @@ public class BrandTable {
      * Queries and print the table
      * @param conn
      */
-    public static void printBrandTable(Connection conn){
-        String query = "SELECT * FROM brand;";
+    public static void printCustomerTable(Connection conn){
+        String query = "SELECT * FROM Customer;";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
             while(result.next()){
-                System.out.printf("Brand %s , Vendor %s\n",
+                System.out.printf("ID %s , Name %s, Date %s, Phone1 %s, Phone2 %s \n",
                         result.getString(1),
-                        result.getString(2));
+                        result.getString(2),
+                        result.getString(3),
+                        result.getString(4),
+                        result.getString(5));
             }
         } catch (SQLException e) {
             e.printStackTrace();
