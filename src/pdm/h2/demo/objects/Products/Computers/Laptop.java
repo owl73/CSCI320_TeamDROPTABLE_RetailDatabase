@@ -6,12 +6,12 @@ package pdm.h2.demo.objects.Products.Computers;
 public class Laptop {
 
     int UPC;
-    int battary_life;
+    int battery_life;
     int screen_size;
 
-    public Laptop(int UPC, int battary_life, int screen_size) {
+    public Laptop(int UPC, int battery_life, int screen_size) {
         this.UPC = UPC;
-        this.battary_life = battary_life;
+        this.battery_life = battery_life;
         this.screen_size = screen_size;
     }
 
@@ -20,7 +20,7 @@ public class Laptop {
     }
 
     public int getBattary_life() {
-        return battary_life;
+        return battery_life;
     }
 
     public int getScreen_size() {

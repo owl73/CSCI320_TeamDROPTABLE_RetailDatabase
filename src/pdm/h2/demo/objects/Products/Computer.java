@@ -6,15 +6,15 @@ package pdm.h2.demo.objects.Products;
 public class Computer {
 
     int UPC;
-    int Ram;
+    int ram;
     String processor;
-    String Disk;
+    String disk;
 
     public Computer(int UPC, int ram, String processor, String disk) {
         this.UPC = UPC;
-        Ram = ram;
+        this.ram = ram;
         this.processor = processor;
-        Disk = disk;
+        this.disk = disk;
     }
 
     public int getUPC() {
@@ -22,7 +22,7 @@ public class Computer {
     }
 
     public int getRam() {
-        return Ram;
+        return ram;
     }
 
     public String getProcessor() {
@@ -30,6 +30,6 @@ public class Computer {
     }
 
     public String getDisk() {
-        return Disk;
+        return disk;
     }
 }
