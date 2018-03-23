@@ -1,4 +1,4 @@
-package objects;
+package pdm.h2.demo.objects;
 
 import java.sql.Date;
 import java.sql.Timestamp;

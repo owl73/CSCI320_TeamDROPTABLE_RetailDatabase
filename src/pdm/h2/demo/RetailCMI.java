@@ -1,3 +1,5 @@
+package pdm.h2.demo;
+
 import java.io.IOException;
 import java.sql.*;
 import java.io.BufferedReader;
@@ -62,33 +64,46 @@ public class RetailCMI {
      * Starts and runs the database
      * @param args: not used but you can use them
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
 
         RetailCMI demo = new RetailCMI();
 
         //Hard drive location of the database
-        String location = "~/h2demo/h2demo";
+        String location = "./db_location/h2demo";
         String user = "scj";
         String password = "password";
-
+        System.out.println("Yeahhh");
         //Create the database connections, basically makes the database
         demo.createConnection(location, user, password);
 
+        demo.getConnection().setAutoCommit(false);
+        
         //Create the reader for command line arguments
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
 
+        BrandTable.createBrandTable(demo.getConnection());
+        BrandTable.printBrandTable(demo.getConnection());
+        
+        System.out.println(demo.getConnection().getAutoCommit());
+        
         while(true){
 
             try{
                 command = br.readLine();
                 String[] comArgs = command.split(" ");
                 int argc = comArgs.length;
-
-                if (comArgs[0].toLowerCase() == "add"){
-                    if (comArgs[1].toLowerCase() == "store"){
+                
+                if (comArgs[0].toLowerCase().equals("add")){
+                    if (comArgs[1].toLowerCase().equals("store")){
                         // todo add store
+                    	System.out.println("Yeahhh");
                     }
+                }
+                else if (comArgs[0].toLowerCase().equals("q"))
+                {
+                	demo.getConnection().close();
+                	System.exit(0);
                 }
 
             } catch (IOException e){
@@ -97,6 +112,5 @@ public class RetailCMI {
             }
 
         }
-
     }
 }

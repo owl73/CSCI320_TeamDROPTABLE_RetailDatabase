@@ -1,4 +1,4 @@
-package objects.Products.Computers;
+package pdm.h2.demo.objects.Products.Computers;
 
 /**
  * Created by Oscar on 3/22/2018.

@@ -1,18 +1,22 @@
-import objects.Store;
+/**
+ * Created by Oscar on 3/22/2018.
+ */
+package pdm.h2.demo;
+import pdm.h2.demo.objects.Vendor;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
-/**
- * Created by Oscar on 3/22/2018.
- */
-public class StoreTable {
+public class VendorTable {
 
-    public static void populateStoreTableFromCSV(Connection conn,
-                                                  String fileName)
+    public static void populateVendorTableFromCSV(Connection conn,
+                                                 String fileName)
             throws SQLException {
         /**
          * Structure to store the data as you read it in
@@ -21,13 +25,13 @@ public class StoreTable {
          * You can do the reading and adding to the table in one
          * step, I just broke it up for example reasons
          */
-        ArrayList<Store> stores = new ArrayList<Store>();
+        ArrayList<Vendor> people = new ArrayList<Vendor>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = br.readLine()) != null) {
                 String[] split = line.split(",");
-                stores.add(new Store(split[0], Date.valueOf(split[1]), Double.parseDouble(split[2]), split[3]));
+                people.add(new Vendor(split[0], split[1], split[2]));
             }
             br.close();
         } catch (IOException e) {
@@ -39,7 +43,7 @@ public class StoreTable {
          * that were read in. This is more efficent then adding one
          * at a time
          */
-        String sql = createStoreInsertSQL(stores);
+        String sql = createVendorInsertSQL(people);
 
         /**
          * Create and execute an SQL statement
@@ -50,7 +54,7 @@ public class StoreTable {
         stmt.execute(sql);
     }
 
-    public static String createStoreInsertSQL(ArrayList<Store> store){
+    public static String createVendorInsertSQL(ArrayList<Vendor> people){
         StringBuilder sb = new StringBuilder();
 
         /**
@@ -59,20 +63,20 @@ public class StoreTable {
          * the order of the data in reference
          * to the columns to ad dit to
          */
-        sb.append("INSERT INTO Store (Phone_Number, Date_Opened, Budget, Address) VALUES");
+        sb.append("INSERT INTO brand (Name, Phone, Website) VALUES");
 
         /**
-         * For each Store append a (id, first_name, last_name, MI) tuple
+         * For each Brand append a (id, first_name, last_name, MI) tuple
          *
-         * If it is not the last Store add a comma to seperate
+         * If it is not the last Brand add a comma to seperate
          *
-         * If it is the last Store add a semi-colon to end the statement
+         * If it is the last Brand add a semi-colon to end the statement
          */
-        for(int i = 0; i < store.size(); i++){
-            Store p = store.get(i);
-            sb.append(String.format(" (\'%s\',DATE(\'%s\'),%f,\'%s\')",
-                   p.getPhone(), p.getDate_opened().toString(), p.getBudget(), p.getAddress()));
-            if( i != store.size()-1){
+        for(int i = 0; i < people.size(); i++){
+            Vendor p = people.get(i);
+            sb.append(String.format(" (\'%s\',\'%s\',\'%s\')",
+                    p.getName(), p.getPhone(), p.getWebsite()));
+            if( i != people.size()-1){
                 sb.append(",");
             }
             else{
@@ -83,15 +87,15 @@ public class StoreTable {
         return sb.toString();
     }
 
-    public static void addStore(Connection conn,
-                                 String phone, Date date, double budget, String address){
+    public static void addVendor(Connection conn,
+                                String Name, String phone, String website){
 
         /**
          * SQL insert statement
          */
-        String query = String.format("INSERT INTO Store "
-                        + "VALUES(\'%s\',DATE(\'%s\'),%f,\'%s\');",
-                phone, date.toString(), budget, address);
+        String query = String.format("INSERT INTO Vendor "
+                        + "VALUES(\'%s\',\'%s\',\'%s\');",
+                Name, phone, website);
         try {
             /**
              * create and execute the query
@@ -104,14 +108,17 @@ public class StoreTable {
 
     }
 
-    public static void updateStoreTable(Connection conn, int id, String phone, double budget){
-
+    public static void updateVendorTable(Connection conn, String Name, String phone, String website){
         StringBuilder updateQuery = new StringBuilder();
 
-        updateQuery.append(String.format("UPDATE Store SET " +
-                "Phone = \'%s\', " +
-                "Budget = %f", phone, budget));
-        updateQuery.append(String.format("WHERE ID = %d", id));
+        /**
+         * The start of the statement,
+         * tells it the table to add it to
+         * the order of the data in reference
+         * to the columns to ad dit to
+         */
+        updateQuery.append(String.format("UPDATE Vendor SET Phone = \'%s\', Website = \'%s\' ", phone, website));
+        updateQuery.append(String.format("WHERE Name = \'%s\'", Name));
         updateQuery.append(";");
 
         try {
@@ -121,8 +128,8 @@ public class StoreTable {
             Statement stmt = conn.createStatement();
             stmt.execute(updateQuery.toString());
         } catch (SQLException e) {
-            System.err.println("Store Update SQL Query failed.");
-            System.err.println(String.format("Store %d, Phone %s, Budget %f", id, phone, budget));
+            System.err.println("Vendor Update SQL Query failed.");
+            System.err.println(String.format("Vendor %s, Phone %s, Site %s", Name, phone, website));
             e.printStackTrace();
         }
 
@@ -131,7 +138,7 @@ public class StoreTable {
     }
 
     /**
-     * Makes a query to the Store table
+     * Makes a query to the Vendor table
      * with given columns and conditions
      *
      * @param conn
@@ -139,9 +146,9 @@ public class StoreTable {
      * @param whereClauses: conditions to limit query by
      * @return
      */
-    public static ResultSet queryStoreTable(Connection conn,
-                                             ArrayList<String> columns,
-                                             ArrayList<String> whereClauses){
+    public static ResultSet queryVendorTable(Connection conn,
+                                            ArrayList<String> columns,
+                                            ArrayList<String> whereClauses){
         StringBuilder sb = new StringBuilder();
 
         /**
@@ -172,7 +179,7 @@ public class StoreTable {
         /**
          * Tells it which table to get the data from
          */
-        sb.append("FROM Store ");
+        sb.append("FROM Vendor ");
 
         /**
          * If we gave it conditions append them
@@ -213,19 +220,17 @@ public class StoreTable {
      * Queries and print the table
      * @param conn
      */
-    public static void printStoreTable(Connection conn){
-        String query = "SELECT * FROM Store;";
+    public static void printVendorTable(Connection conn){
+        String query = "SELECT * FROM Vendor;";
         try {
             Statement stmt = conn.createStatement();
             ResultSet result = stmt.executeQuery(query);
 
             while(result.next()){
-                System.out.printf("Store %s , Phone %s, DateOpened %s, Budget %s, Address %s\n",
+                System.out.printf("Vendor %s , Phone %s, Website %s\n",
                         result.getString(1),
                         result.getString(2),
-                        result.getString(3),
-                        result.getString(4),
-                        result.getString(5));
+                        result.getString(3));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -233,7 +238,4 @@ public class StoreTable {
 
     }
 
-    
-    
-    
 }

@@ -1,8 +1,8 @@
 /**
  * Created by Oscar on 3/22/2018.
  */
-
-import objects.Brand;
+package pdm.h2.demo;
+import pdm.h2.demo.objects.Brand;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -66,6 +66,7 @@ public class BrandTable {
              */
             Statement stmt = conn.createStatement();
             stmt.execute(query);
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -156,9 +157,6 @@ public class BrandTable {
             System.err.println(String.format("Brand %s, Vendor %s", Name, newVendor));
             e.printStackTrace();
         }
-
-
-
     }
 
     /**
