@@ -1,10 +1,11 @@
-\documentclass{article}
+\documentclass[12pt]{article}
 
+\usepackage[normalem]{ulem}
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
 \usepackage{enumitem}
-\usepackage{float}
 
+\usepackage{float}
 \usepackage{graphicx}
 \graphicspath{{./}}
 
@@ -55,13 +56,6 @@
 		product into product types.
 
 	\section{ER Diagram}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.95\textwidth]{ER_diagram}
-      \caption{ER Diagram for Database}
-      \label{fig:er}
-    \end{figure}
-
     The Product entity is a major entity in our database. It has a relation with
     almost every entity. This makes sense for a retail database as retailers are
     generally focused on the products they sell. The major products sold at our
@@ -92,68 +86,72 @@
       \item Stock(\underline{Store\_ID, UPC}, Inventory, Listed\_Price);
 		\end{itemize}
 
-		\subsection{Products}
+		\subsection{Product}
 			Product contains the attributes UPC and Description. UPC is a unique
 			identifier to identify the product in the database. Description is a short
 			description of the product for customer and employee benefit. All other
 			attributes associated with a product specified by that products subtype.
-			Our subtypes are Compter and Monitor. All products must also have a UPC that 
-			matches one in the product above it. For example, a Laptop must match a 
-			computer that must match a product.
+			Our subtypes are Screen and Computer.
 
-			\subsubsection{Monitor}
-				Monitor was chosen as a product type due to our focus on electronics.  A
-				large number of electronics these days feature a screen. In addition, the
-				monitor is a major consideration in the purchase of an electronic device.
+		\subsection{Screen}
+			Screen was chosen as a product type due to our focus on electronics.  A
+			large number of electronics these days feature a screen. In addition, the
+			screen is a major consideration in the purchase of an electronic device.
+			Currently, the two product types that inherit from Screen are Laptops and
+			TVs.
 
-			\subsection{Computer}
-				Computers are the other major section of the products represented by our
-				database. Computers main common attributes among all types of computers
-				are RAM size, the processor, and the Hard Drive size. 
-				\begin{itemize}
-				
-					\item [Laptop] Laptop inherits from both Computer and Screen because 
-					it fits well in both categories. All important parts of a Laptop are 
-					covered in either Screen or Computer, except for Battery Life.
-					
-					\item [Desktop]  A desktop computer is just the tower. It does not 
-					include a keyboard, a mouse, or a monitor, therefore it does not 
-					inherit from Screen. Attributes that apply to desktops that don't apply 
-					to other computers (Laptops) are the Power Supply, and the Graphics Card.
-					
-				\end{itemize}
+		\subsection{TV}
+			TVs are one of the types of products represented by our database. There
+			are few features of a TV that are considered apart from the screen. Two
+			important aspects of a TV are any smart features it has, and the mount
+			type available (e.g. Wall mounted, stand mount, etc.).
+
+		\subsection{Computer}
+			Computers are the other major section of the products represented by our
+			database. Computers main common attributes among all types of computers
+			are RAM size, the processor, and the Hard Drive size. 
+
+
+		\subsection{Laptop}
+			Laptop inherits from both Computer and Screen because it fits well in both
+			categories. All important parts of a Laptop are covered in either Screen
+			or Computer, except for Battery Life.
+
+		\subsection{Desktop}
+			A desktop computer is just the tower. It does not include a keyboard, a
+			mouse, or a monitor, therefore it does not inherit from Screen. Attributes
+			that apply to desktops that don't apply to other computers (Laptops) are
+			the Power Supply, and the Graphics Card.
 
 		\subsection{Brand}
 			Brand is an alternate way to group products together. The major aspects of
-			Brand is the Name and the vendor it belongs to. The Brand names must not 
-			match the brand name of any other brand, and the vendor must pair with 
-			an existing vendor in the vendor table. 
+			Brand is the Name and the Trademark. While it is technically possible for
+			two brands to have the same name, it is not possible for two brands to
+			have the same Trademark. Trademark is included to prevent brand conflicts.
 
 		\subsection{Vendor}
 			A vendor represents a company that our stores purchase products from to
 			sell to consumers. A vendor is represented by their company name, their
-			phone number, and their website. A vendor is identified by their name as
-			that is how they are identified.
+			phone number, and their website.
 
-		\subsection{Shipment}
-			Shipment represents an shipment placed by an employee to resupply a stores
-			stock. The shipment consists of a unique ID to identify it, the date it was placed, 
-			the date it arrived, the total cost of the shipment, the tracking number for the
-			shipment, the vendor name, a UPC, and the quantity, and a store ID. The quantity 
-			and UPC are used to keep track of how many of each product was shipment. 
-			The vendor name is used to link the shipment with the vendor. The store id is 
-			used to keep track of the store the product is being delivered to.
+		\subsection{Order}
+			Order represents an order placed by an employee to resupply a stores
+			stock. The Order consists of a unique ID, the date it was placed, the date
+			it arrived, the total cost of the order, the tracking number for the
+			shipment, the vendor name, a UPC, and the quantity. The quantity and UPC
+			are used to keep track of how many of each product was ordered. The vendor
+			name is used to link the order with the vendor.
 
 		\subsection{Bought\_Products}
-			A table was needed to handle the relation between Purchase and Product
-			as multiple of the same product could be purchased in one purchase.
+			A table was needed to handle the relation between Transaction and Product
+			as multiple of the same product could be purchased in one transaction.
 			Price also needed to be tracked as prices of a particular product change
 			at different stores.
 
 		\subsection{Store}
 			Our database may need to track information about multiple stores. A store
 			is represented by a unique ID, the store's phone number, the date the
-			store opened, a yearly budget for the store, and the store's address.
+			store opened, and the store's address.
 
 		\subsection{Stock}
 			A table is needed to manage interactions between Stores and Products.
@@ -169,42 +167,16 @@
 			their name, their email address, the date they joined the program, and
 			their phone number(s).
 
-		\subsection{Purchase}
-			A purchase consists of a unique ID, the date it was placed, the payment
+		\subsection{Transaction}
+			A transaction consists of a unique ID, the date it was placed, the payment
 			total, the method of payment (e.g. Credit Card, Debit Card, Cash, etc.), a
-			customer ID (e.g. phone number, etc.), and the store ID. A purchase can
-			be tied to a customer for the loyalty program. A purchase will not be
+			customer ID (e.g. phone number, etc.), and the store ID. A transaction can
+			be tied to a customer for the loyalty program. A transaction will not be
 			tied to a customer if the customer is not a part of the loyalty program.
 			Due to the loyalty program it is likely a customer will be tied to
-			multiple purchase, but a single purchase will only be tied to a
+			multiple transactions, but a single transaction will only be tied to a
 			single customer.
-			
-	\section{Application}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.85\textwidth]{UML_Diagram}
-      \caption{UML Diagram for Application}
-      \label{fig:uml}
-	
-		\subsection{CMI}
-			The CMI handles getting the next command from the user, calling the functions for the specified commands,
-			initializing the connections, sending queries to the connection manager and dealing with query results. 
-			
-		\subsection{ConnectionManager}
-			This holds the connection to the database and is the only one to query the database. 
-			
-		\subsection{relations}
-			Using a relation interface, we will implement a class for every table our project deals with. The relation
-			interface will specify functions that will allow getting the values and columns without having to know what
-			relation is being used. This allows for creation of generic queries usable with all possible relations.
-			
-		\subsection{Commands}
-			Every command has its own class that generates code based on its specified function (see use cases). 
-			They will also get the specified values for the sql using the relation interface to select the requirements
-			for its query. It returns a query or an error depending on the values given by the user.
-			
-		\subsection{RelationGetter}
-			Returns a relation object of the type specified. 
+
 
 
 	\section{Test Data}
