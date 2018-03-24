@@ -20,6 +20,6 @@ Shipment ( ID , Date_placed , Date_arrived , Cost , Tracking_number , Vendor_nam
 
 Purchase ( ID , Date , Total , Payment_Method , Customer_ID , Store_ID );
 
-Bought_Products( Product_UPC , Purchase_ID , Quantity , Price );
+Bought_Products( Purchase_ID, Product_UPC , Quantity , Price );
 
 Stock ( Store_ID , UPC , Inventory , Listed_Price);
