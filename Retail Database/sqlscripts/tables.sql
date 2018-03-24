@@ -21,7 +21,10 @@ CREATE TABLE Store (
     Phone_Number VARCHAR(12),
     Date_Opened DATE,
     Budget NUMERIC(15,2),
-    Address VARCHAR(30));
+    Address VARCHAR(30),
+    City VARCHAR(20),
+    State VARCHAR(2),
+    Zip_code VARCHAR(6));
 
 CREATE TABLE Product (
     UPC INT NOT NULL PRIMARY KEY,
@@ -33,24 +36,28 @@ CREATE TABLE Computer (
     UPC INT PRIMARY KEY,
     Ram_Size INT,
     Processor VARCHAR(10),
-    Hard_Disk VARCHAR(8));
+    Hard_Disk VARCHAR(8),
+    FOREIGN KEY(UPC) REFERENCES Product);
 
 CREATE TABLE Desktop (
     UPC INT PRIMARY KEY,
     Power_Supply VARCHAR(8),
-    Graphics_Card VARCHAR(10));
+    Graphics_Card VARCHAR(10),
+    FOREIGN KEY(UPC) REFERENCES Computer);
 
 CREATE TABLE Monitor (
     UPC INT PRIMARY KEY,
-    Size INT,
+    Screen_size INT,
     Resolution VARCHAR(10),
     PPI INT,
-    Panel_Type VARCHAR(10));
+    Panel_Type VARCHAR(10),
+    FOREIGN KEY(UPC) REFERENCES Product);
 
 CREATE TABLE Laptop ( 
     UPC INT NOT NULL PRIMARY KEY,
     Battery_Life INT
-    Screen_Size INT);
+    Screen_Size INT,
+    FOREIGN KEY(UPC) REFERENCES Computer);
 
 CREATE TABLE Shipment (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -61,12 +68,14 @@ CREATE TABLE Shipment (
     Vendor_name VARCHAR(20),
     UPC INT,
     Quantity INT,
+    Store_ID INT,
     FOREIGN KEY(Vendor_name) REFERENCES Vendor,
-    FOREIGN KEY(UPC) REFERENCES Product);
+    FOREIGN KEY(UPC) REFERENCES Product,
+    FOREIGN KEY(Store_ID) REFERENCES Store);
 
 CREATE TABLE Purchase (
     ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    Date TIMESTAMP NOT NULL DEFAULT ,
+    time_completed TIMESTAMP NOT NULL DEFAULT ,
     Total NUMERIC(10,2), 
     Payment_Method VARCHAR(10), 
     Customer_ID INT,
@@ -90,6 +99,3 @@ CREATE TABLE Stock (
     Listed_Price NUMERIC(10,2)
     FOREIGN KEY(Store_ID) REFERENCES Store,
     FOREIGN KEY(UPC) REFERENCES Product);
-
-
-
