@@ -85,7 +85,7 @@ CREATE TABLE Purchase (
 
 CREATE TABLE Bought_Products(
     Purchase_ID INT PRIMARY KEY,
-    Product_UPC INT,
+    Product_UPC INT PRIMARY KEY ,
     Quantity INT,
     Price NUMERIC(15,2),
     FOREIGN KEY(Product_UPC) REFERENCES Product(UPC),
@@ -93,8 +93,8 @@ CREATE TABLE Bought_Products(
 
 
 CREATE TABLE Stock ( 
-    Store_ID INT PRIMARY KEY ,
-    UPC INT PRIMARY KEY ,
+    Store_ID INT PRIMARY KEY,
+    UPC INT PRIMARY KEY,
     Inventory INT, 
     Listed_Price NUMERIC(10,2),
     FOREIGN KEY(Store_ID) REFERENCES Store(ID),
