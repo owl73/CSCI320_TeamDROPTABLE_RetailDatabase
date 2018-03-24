@@ -1,101 +1,101 @@
 CREATE TABLE Customer (
-    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(10),
-    Email_Address VARCHAR(30),
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(50),
+    Email_Address VARCHAR(50),
     Date_Joined TIMESTAMP,
     Phone_Number_1 VARCHAR(12),
     Phone_Number_2 VARCHAR(12));
 
 CREATE TABLE Vendor (
-    Name VARCHAR(20) PRIMARY KEY,
+    Name VARCHAR(50) PRIMARY KEY,
     Phone VARCHAR(12),
-    Website VARCHAR(20));
+    Website VARCHAR(50));
 
 CREATE TABLE Brand (
-    Name VARCHAR(10) PRIMARY KEY,
-    Vendor VARCHAR(20),
-    FOREIGN KEY(Vendor) REFERENCES Vendor);
+    Name VARCHAR(50) PRIMARY KEY,
+    Vendor VARCHAR(50),
+    FOREIGN KEY(Vendor) REFERENCES Vendor(Name));
 
 CREATE TABLE Store (
-    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
     Phone_Number VARCHAR(12),
     Date_Opened DATE,
     Budget NUMERIC(15,2),
-    Address VARCHAR(30),
+    Address VARCHAR(50),
     City VARCHAR(20),
     State VARCHAR(2),
     Zip_code VARCHAR(6));
 
 CREATE TABLE Product (
-    UPC INT NOT NULL PRIMARY KEY,
-    Description VARCHAR(20),
-    Brand VARCHAR(10),
-    FOREIGN KEY(Brand) REFERENCES Brand,);
+    UPC INT PRIMARY KEY,
+    Description VARCHAR(100),
+    Brand VARCHAR(50),
+    FOREIGN KEY(Brand) REFERENCES Brand(Name));
 
 CREATE TABLE Computer (
     UPC INT PRIMARY KEY,
     Ram_Size INT,
-    Processor VARCHAR(10),
-    Hard_Disk VARCHAR(8),
-    FOREIGN KEY(UPC) REFERENCES Product);
+    Processor VARCHAR(50),
+    Hard_Disk VARCHAR(10),
+    FOREIGN KEY(UPC) REFERENCES Product(UPC));
 
 CREATE TABLE Desktop (
     UPC INT PRIMARY KEY,
-    Power_Supply VARCHAR(8),
+    Power_Supply VARCHAR(10),
     Graphics_Card VARCHAR(10),
-    FOREIGN KEY(UPC) REFERENCES Computer);
+    FOREIGN KEY(UPC) REFERENCES Computer(UPC));
 
 CREATE TABLE Monitor (
     UPC INT PRIMARY KEY,
     Screen_size INT,
     Resolution VARCHAR(10),
     PPI INT,
-    Panel_Type VARCHAR(10),
-    FOREIGN KEY(UPC) REFERENCES Product);
+    Panel_Type VARCHAR(20),
+    FOREIGN KEY(UPC) REFERENCES Product(UPC));
 
 CREATE TABLE Laptop ( 
-    UPC INT NOT NULL PRIMARY KEY,
-    Battery_Life INT
+    UPC INT PRIMARY KEY,
+    Battery_Life INT,
     Screen_Size INT,
-    FOREIGN KEY(UPC) REFERENCES Computer);
+    FOREIGN KEY(UPC) REFERENCES Computer(UPC));
 
 CREATE TABLE Shipment (
-    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ID INT AUTO_INCREMENT PRIMARY KEY,
     Date_placed DATE,
     Date_arrived DATE,
     Cost NUMERIC(15,2), 
     Tracking_number VARCHAR(30),
-    Vendor_name VARCHAR(20),
+    Vendor_name VARCHAR(50),
     UPC INT,
     Quantity INT,
     Store_ID INT,
-    FOREIGN KEY(Vendor_name) REFERENCES Vendor,
-    FOREIGN KEY(UPC) REFERENCES Product,
-    FOREIGN KEY(Store_ID) REFERENCES Store);
+    FOREIGN KEY(Vendor_name) REFERENCES Vendor (Name),
+    FOREIGN KEY(UPC) REFERENCES Product(UPC),
+    FOREIGN KEY(Store_ID) REFERENCES Store(ID));
 
 CREATE TABLE Purchase (
-    ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    time_completed TIMESTAMP NOT NULL DEFAULT ,
-    Total NUMERIC(10,2), 
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    time_completed TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    Total NUMERIC(10,2),
     Payment_Method VARCHAR(10), 
     Customer_ID INT,
     Store_ID INT,
-    FOREIGN KEY(Store_ID) REFERENCES Store,
-    FOREIGN KEY(Customer_ID) REFERENCES Customer);
+    FOREIGN KEY(Store_ID) REFERENCES Store(ID),
+    FOREIGN KEY(Customer_ID) REFERENCES Customer(ID));
 
-CREATE TABLE Bought_Products( 
-    Product_UPC INT FOREIGN KEY,
-    Purchase_ID INT FOREIGN KEY,
-    Quantity INT, 
+CREATE TABLE Bought_Products(
+    Purchase_ID INT PRIMARY KEY,
+    Product_UPC INT,
+    Quantity INT,
     Price NUMERIC(15,2),
-    FOREIGN KEY(Product_UPC) REFERENCES Product,
-    FOREIGN KEY(Purchase_ID) REFERENCES Purchase);
+    FOREIGN KEY(Product_UPC) REFERENCES Product(UPC),
+    FOREIGN KEY(Purchase_ID) REFERENCES Purchase(ID));
 
 
 CREATE TABLE Stock ( 
-    Store_ID INT,
-    UPC INT,
+    Store_ID INT PRIMARY KEY ,
+    UPC INT PRIMARY KEY ,
     Inventory INT, 
-    Listed_Price NUMERIC(10,2)
-    FOREIGN KEY(Store_ID) REFERENCES Store,
-    FOREIGN KEY(UPC) REFERENCES Product);
+    Listed_Price NUMERIC(10,2),
+    FOREIGN KEY(Store_ID) REFERENCES Store(ID),
+    FOREIGN KEY(UPC) REFERENCES Product(UPC));
