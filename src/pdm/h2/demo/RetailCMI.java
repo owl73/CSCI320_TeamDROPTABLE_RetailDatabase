@@ -69,21 +69,34 @@ public class RetailCMI {
         RetailCMI demo = new RetailCMI();
 
         //Hard drive location of the database
-        String location = "./db_location/h2demo";
+        String location = "./db_location1/h2demo";
         String user = "scj";
         String password = "password";
         System.out.println("Yeahhh");
+        
         //Create the database connections, basically makes the database
         demo.createConnection(location, user, password);
-        demo.getConnection().setAutoCommit(false);
+        
+        Statement stat = demo.getConnection().createStatement();
+        stat.execute("create table test(id int primary key, name varchar(255))");
+        stat.execute("insert into test values(1, 'Hello')");
+        try (ResultSet rs = stat.executeQuery("select * from test")) {
+            while (rs.next()) {
+                System.out.println(rs.getString("name"));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        //demo.getConnection().setAutoCommit(false);
         //Create the reader for command line arguments
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         String command = "";
         
         //BrandTable.createBrandTable(demo.getConnection());
         //BrandTable.printBrandTable(demo.getConnection());
-        CustomerTable.createCustomerTable(demo.getConnection());
-        CustomerTable.printCustomerTable(demo.getConnection());
+        //CustomerTable.createCustomerTable(demo.getConnection());
+        //CustomerTable.printCustomerTable(demo.getConnection());
         
         while(true){
 

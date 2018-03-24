@@ -66,7 +66,6 @@ public class BrandTable {
              */
             Statement stmt = conn.createStatement();
             stmt.execute(query);
-            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
