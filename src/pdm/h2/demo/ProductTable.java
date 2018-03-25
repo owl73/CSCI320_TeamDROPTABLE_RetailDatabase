@@ -84,6 +84,22 @@ public class ProductTable {
         return sb.toString();
     }
 
+    public static void createProductTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Product ( \n" +
+                    "    UPC INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Desc VARCHAR(32),\n" +
+                    "    Brand VARCHAR(32));";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void addProduct(Connection conn,
                                  int UPC, String desc, String brand){
 

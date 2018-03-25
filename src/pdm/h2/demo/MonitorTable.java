@@ -86,7 +86,23 @@ public class MonitorTable {
 
         return sb.toString();
     }
+    
+    public static void createMonitorTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Monitor ( \n" +
+                    "    UPC INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Size INT,\n" +
+                    "    PPI INT, PanelType VARCHAR(32));";
 
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void addMonitor(Connection conn,
                                 int upc, int size, int ppi, String panel){
 

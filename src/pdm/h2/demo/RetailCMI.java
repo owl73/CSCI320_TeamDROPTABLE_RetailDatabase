@@ -60,6 +60,20 @@ public class RetailCMI {
         }
     }
 
+    public static void createTablesIfNecessary(Connection conn)
+    {
+    	BrandTable.createBrandTable(conn);
+    	ComputerTable.createComputerTable(conn);
+    	CustomerTable.createCustomerTable(conn);
+    	DesktopTable.createDesktopTable(conn);
+    	LaptopTable.createLaptopTable(conn);
+    	MonitorTable.createMonitorTable(conn);
+    	ProductTable.createProductTable(conn);
+    	PurchaseTable.createPurchaseTable(conn);
+    	StoreTable.createStoreTable(conn);
+    	VendorTable.createVendorTable(conn);
+    }
+    
     /**
      * Starts and runs the database
      * @param args: not used but you can use them
@@ -77,8 +91,8 @@ public class RetailCMI {
         //Create the database connections, basically makes the database
         demo.createConnection(location, user, password);
         
-        Statement stat = demo.getConnection().createStatement();
-        stat.execute("create table test(id int primary key, name varchar(255))");
+        /*Statement stat = demo.getConnection().createStatement();
+        stat.execute("create table if not exists test(id int primary key, name varchar(255))");
         stat.execute("insert into test values(1, 'Hello')");
         try (ResultSet rs = stat.executeQuery("select * from test")) {
             while (rs.next()) {
@@ -86,7 +100,7 @@ public class RetailCMI {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
         
         //demo.getConnection().setAutoCommit(false);
         //Create the reader for command line arguments

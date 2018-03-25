@@ -85,6 +85,22 @@ public class LaptopTable {
         return sb.toString();
     }
 
+    public static void createLaptopTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Laptop ( \n" +
+                    "    UPC INT PRIMARY KEY AUTO_INCREMENT NOT NULL, battery_life INT,\n" +
+                    "    screen_size INT);";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void addLaptop(Connection conn,
                                  int UPC,
                                  int battery_life,
