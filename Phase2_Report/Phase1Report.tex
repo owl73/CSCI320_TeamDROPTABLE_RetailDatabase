@@ -1,7 +1,6 @@
 \documentclass{article}
 
 \usepackage[normalem]{ulem}
-\usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
 \usepackage{enumitem}
 
@@ -12,7 +11,11 @@
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 
-\lhead{null'); DROP TABLE Students;}
+\usepackage{hyperref}
+
+\newcommand{\Team}{null'); DROP TABLE Students;}
+
+\lhead{\Team}
 \chead{\Large \textbf{Phase 1}\vspace{0pt}}
 \rhead{\today}
 \setlength{\headheight}{46pt}
@@ -22,7 +25,7 @@
 \setlist[itemize, 2]{label={--}}
 
 
-\title{Principles of Data Management\\\Large Phase 1}
+\title{Principles of Data Management\\\Large Phase 2\\\vspace{14pt}\Team}
 \date{\today}
 \author{
 	Andrew Hamrick
@@ -36,6 +39,7 @@
 
 \begin{document}
 	\maketitle
+  \thispagestyle{empty}
 	\newpage
 
 	\section{Design}
@@ -58,21 +62,20 @@
 	\section{ER Diagram}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.95\textwidth]{ER_diagram}
+      \includegraphics[width=0.95\textwidth]{er_diagram}
       \caption{ER Diagram for Database}
       \label{fig:er}
     \end{figure}
 
-    The Product entity is a major entity in our database. It has a relation with
-    almost every entity. This makes sense for a retail database as retailers are
-    generally focused on the products they sell. The major products sold at our
-    establishment are Laptops, Desktops, Computers, and Monitors. Our product
-    types are Screen and Computer as those make up the two major groups of our
-    products.  These subgroups inherit identical attributes from parent
-    entities.  TV obviously inherits from Screen. As the screen is a major
-    component of a laptop, laptop also inherits from Screen.  Desktop obviously
-    inherits from Computer, however because a laptop is also a computer, it
-    inherits from Computer in addition to Screen.
+    The Product entity is a major entity in our database. It has a relation with almost every
+    entity. This makes sense for a retail database as retailers are generally focused on the
+    products they sell. The major products sold at our establishment are Laptops, Desktops,
+    Computers, and Monitors. Our product types are Screen and Computer as those make up the two
+    major groups of our products. These subgroups inherit identical attributes from parent
+    entities. TV obviously inherits from Screen. As the screen is a major component of a
+    laptop, laptop also inherits from Screen.  Desktop obviously inherits from Computer,
+    however because a laptop is also a computer, it inherits from Computer in addition to
+    Screen.
 
 		\noindent 
 		The Tables for our database are:
@@ -94,34 +97,32 @@
 		\end{itemize}
 
 		\subsection{Products}
-			Product contains the attributes UPC and Description. UPC is a unique
-			identifier to identify the product in the database. Description is a short
-			description of the product for customer and employee benefit. All other
-			attributes associated with a product specified by that products subtype.
-			Our subtypes are Computer and Monitor. All products must also have a UPC that 
-			matches one in the product above it. For example, a Laptop must match a 
-			computer that must match a product.
+      Product contains the attributes UPC and Description. UPC is a unique identifier to
+      identify the product in the database. Description is a short description of the product
+      for customer and employee benefit. All other attributes associated with a product
+      specified by that products subtype.  Our subtypes are Computer and Monitor. All products
+      must also have a UPC that matches one in the product above it. For example, a Laptop must
+      match a computer that must match a product.
 
 			\subsubsection{Monitor}
 				Monitor was chosen as a product type due to our focus on electronics.  A
 				large number of electronics these days feature a screen. In addition, the
 				monitor is a major consideration in the purchase of an electronic device.
 
-			\subsection{Computer}
-				Computers are the other major section of the products represented by our
-				database. Computers main common attributes among all types of computers
-				are RAM size, the processor, and the Hard Drive size. 
+			\subsubsection{Computer}
+        Computer is the other major section of the products represented by our database.
+        Computer's attributes that are common among all types of computers are RAM size, the
+        processor, and the Hard Drive size. 
 				\begin{itemize}
-				
-					\item [Laptop] Laptop inherits from both Computer and Screen because 
-					it fits well in both categories. All important parts of a Laptop are 
-					covered in either Screen or Computer, except for Battery Life.
-					
-					\item [Desktop]  A desktop computer is just the tower. It does not 
-					include a keyboard, a mouse, or a monitor, therefore it does not 
-					inherit from Screen. Attributes that apply to desktops that don't apply 
-					to other computers (Laptops) are the Power Supply, and the Graphics Card.
-					
+          \item Laptop\\
+            Laptop inherits from both Computer and Screen because it fits well in both
+            categories. All important parts of a Laptop are covered in either Screen or
+            Computer, except for Battery Life.
+					\item Desktop\\
+            A desktop computer is just the tower. It does not include a keyboard, a mouse, or a
+            monitor, therefore it does not inherit from Screen. Attributes that apply to
+            desktops that don't apply to other computers (Laptops) are the Power Supply, and
+            the Graphics Card.
 				\end{itemize}
 
 		\subsection{Brand}
@@ -183,9 +184,10 @@
 	\section{Application}
     \begin{figure}[H]
       \centering
-      \includegraphics[width=0.85\textwidth]{UML_Diagram}
+      \includegraphics[width=0.85\textwidth]{uml_diagram}
       \caption{UML Diagram for Application}
       \label{fig:uml}
+    \end{figure}
 	
 		\subsection{CMI}
 			The CMI handles getting the next command from the user, calling the functions for the specified commands,
@@ -194,7 +196,7 @@
 		\subsection{ConnectionManager}
 			This holds the connection to the database and is the only one to query the database. 
 			
-		\subsection{relations}
+		\subsection{Relations}
 			Using a relation interface, we will implement a class for every table our project deals with. The relation
 			interface will specify functions that will allow getting the values and columns without having to know what
 			relation is being used. This allows for creation of generic queries usable with all possible relations.
@@ -291,8 +293,29 @@
         Examples:
         \begin{itemize}
           \item Track 2 Desktop
-          \item Track 10 ``LG TV 72"
         \end{itemize}
     \end{itemize}
+
+  \section{Design Changes}
+    A couple design changes were made since Phase 1. The changes are as follows:
+    \begin{itemize}
+      \item TV was removed
+      \item Screen changed to Monitor
+      \item Transaction was renamed to Purchase
+      \item Order was renamed to Shipment
+      \item Order/Shipment was changed to include a store
+      \item Store's address was expanded to include City, State, and Zip
+    \end{itemize}
+    Several changes were made from Phase 1 to improve clarity and simplify the design.  TV was
+    removed to reduce the number of tables needed for our design.  Laptop was separated from
+    Screen for simplicity. Screen was then changed to Monitor and became a separate product.
+    Transaction was renamed to Purchase because transaction is a keyword for SQL.  Order was
+    renamed to Shipment because ORDER is an SQL keyword. Shipment was extended to include a
+    store so the design could work with multiple stores.  Our design for our UI included the
+    ability to query by state. In order for us to know a Store's state, Store's address needed
+    to be expanded. Address is now just the street address and Store now includes City, State,
+    and Zip Code.
+    \subsection{TV and Monitor}
+
 
   \end{document}
