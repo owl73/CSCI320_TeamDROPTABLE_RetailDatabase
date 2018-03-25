@@ -84,6 +84,22 @@ public class StoreTable {
         return sb.toString();
     }
 
+    public static void createStoreTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Store ( \n" +
+                    "    ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Date Datetime, Total Double\n" +
+                    "    paymentMethod VARCHAR(32), storeID INT, customerID INT);";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void addStore(Connection conn,
                                  String phone, Date date, double budget, String address){
 

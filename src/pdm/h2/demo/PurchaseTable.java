@@ -94,6 +94,22 @@ public class PurchaseTable {
 
         return sb.toString();
     }
+    
+    public static void createPurchaseTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Purchase ( \n" +
+                    "    ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, Date Datetime, Total Double\n" +
+                    "    paymentMethod VARCHAR(32), storeID INT, customerID INT);";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void addPurchase(Connection conn,
                                 int id, Timestamp date, double tot, String payment, int s_id, int c_id){

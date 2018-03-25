@@ -57,6 +57,22 @@ public class ComputerTable {
         stmt.execute(sql);
     }
 
+    public static void createComputerTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Computer ( \n" +
+                    "    UPC INT PRIMARY KEY AUTO_INCREMENT NOT NULL, RAM INT,\n" +
+                    "    Processor varchar(32), Disk varchar(32));";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static String createComputerInsertSQL(ArrayList<Computer> computers){
         StringBuilder sb = new StringBuilder();
 

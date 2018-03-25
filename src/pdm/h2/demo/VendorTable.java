@@ -87,6 +87,22 @@ public class VendorTable {
         return sb.toString();
     }
 
+    public static void createVendorTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Vendor ( \n" +
+                    "    Name VARCHAR(64) NOT NULL, Phone VARCHAR(15)\n" +
+                    "    Website VARCHAR(64));";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void addVendor(Connection conn,
                                 String Name, String phone, String website){
 

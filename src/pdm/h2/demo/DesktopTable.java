@@ -108,6 +108,22 @@ public class DesktopTable {
 
     }
 
+    public static void createDesktopTable(Connection conn) {
+        try {
+            String query = "CREATE TABLE IF NOT EXISTS Desktop ( \n" +
+                    "    UPC INT PRIMARY KEY AUTO_INCREMENT NOT NULL, PowerSupply VARCHAR(32),\n" +
+                    "    Card varchar(32));";
+
+            /**
+             * Create a query and execute
+             */
+            Statement stmt = conn.createStatement();
+            stmt.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public static void updateDesktopTable(Connection conn,
                                            int UPC,
                                            String powersupply,
